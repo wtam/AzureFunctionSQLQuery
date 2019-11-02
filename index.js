@@ -12,7 +12,7 @@ var config = {
 };
 
 module.exports = function (context, req) {
-    context.log('Reading rows from the Table...');
+    context.log('HTTP SQL request......');
 
     var connection = new Connection(config);
     var resultList = []
