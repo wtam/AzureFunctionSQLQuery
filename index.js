@@ -12,12 +12,19 @@ var config = {
 };
 
 module.exports = function (context, req) {
-    context.log('HTTP SQL request......');
+    context.log('HTTP SQL request...');
+
+    sqlQuery = "SELECT TOP 5 pc.Name as CategoryName, p.name as ProductName FROM [SalesLT].[ProductCategory] pc "
+                    + "JOIN [SalesLT].[Product] p ON pc.productcategoryid = p.productcategoryid"
+    if (req.query.sql) {
+        context.log('HTTP SQL request: '+ req.query.sql)
+        sqlQuery = req.query.sql
+    }
 
     var connection = new Connection(config);
     var resultList = []
 
-    connection.on('connect', function(err) {
+    connection.on('connect', async function(err) {
         if (err) {
             context.log(err);
             context.res = {
@@ -26,13 +33,12 @@ module.exports = function (context, req) {
             };
             context.done();
         } else {
-            queryDatabase();
+            await queryDatabase(sqlQuery);
         }
     })
 
-    function queryDatabase() {
-        request = new Request("SELECT TOP 5 pc.Name as CategoryName, p.name as ProductName FROM [SalesLT].[ProductCategory] pc "
-            + "JOIN [SalesLT].[Product] p ON pc.productcategoryid = p.productcategoryid", function(err, rowCount) {
+    function queryDatabase(sqlQuery) {
+        request = new Request(sqlQuery, function(err, rowCount) {
             if (err) {
                 context.log(err);
                 context.res = {
