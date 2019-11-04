@@ -3,7 +3,7 @@ For training purpose on how to develop Azure Function to query Azure SQL using n
 
 # Prerequisites : 
 	- https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-function-vs-code#prerequisites
-	- Creat Azure SQL with sample DB
+	- Creat Azure SQL with sample DB: https://docs.microsoft.com/en-us/azure/sql-database/sql-database-single-database-get-started?tabs=azure-portal
 
 # Create an Azure Function on VS Code 
   - Create an HTTP triggerAzure Function e.g. HttpTriggerSQL
@@ -18,7 +18,11 @@ For training purpose on how to develop Azure Function to query Azure SQL using n
   - replace index.js with the index.js in this repo
 
 # Run on VS Code
+  - Env:
+  	- Internet: Use Mobile Hot Spot, Corporate Network may block reaching the Azure SQL
+	- On Azure SQL: Whitelist the client IP (yout local laptop IP) on Azure SQL firewall
   - F5 t0 run
+  - Browser with default SQL query: http://localhost:7071/api/HttpTriggerSQL
   
 # Publish to Azure from VS Code
 
