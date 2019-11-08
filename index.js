@@ -16,9 +16,9 @@ module.exports = function (context, req) {
 
     sqlQuery = "SELECT TOP 5 pc.Name as CategoryName, p.name as ProductName FROM [SalesLT].[ProductCategory] pc "
                     + "JOIN [SalesLT].[Product] p ON pc.productcategoryid = p.productcategoryid"
-    if (req.query.sql) {
-        context.log('HTTP SQL request: '+ req.query.sql)
-        sqlQuery = req.query.sql
+    if (req.body.sql) {
+        context.log('HTTP SQL request: '+ req.body.sql)
+        sqlQuery = req.body.sql
     }
 
     var connection = new Connection(config);
