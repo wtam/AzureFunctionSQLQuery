@@ -1,9 +1,15 @@
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
 
+// Keyvault to protect the secret!!!
+// 1. enable the managed identity from this AzFun's Platfrom Feature -> Networking -> identity
+// 2. goto the KeyVault's access policy and add Service Principal with the objectID from step 1 and grant the access policy
+// 3. add the env variable from the configuration -> App Settings e.g. Secret_password and vaule = @Microsoft.KeyVault(SecretUri=keyVault's Secret_password uri)
+var db_username = process.env["Secret_username"]
+var db_password = process.env["Secret_password"]
 var config = {
-    userName: 'user',
-    password: 'password',
+    userName: db_username,
+    password: db_password,
     server: 'Azure SQL Server name',
     options: {
             database: 'Azure SQL Server DB name',
@@ -12,13 +18,14 @@ var config = {
 };
 
 module.exports = function (context, req) {
-    context.log('HTTP SQL request...');
-
     sqlQuery = "SELECT TOP 5 pc.Name as CategoryName, p.name as ProductName FROM [SalesLT].[ProductCategory] pc "
                     + "JOIN [SalesLT].[Product] p ON pc.productcategoryid = p.productcategoryid"
+
     if (req.body.sql) {
         context.log('HTTP SQL request: '+ req.body.sql)
         sqlQuery = req.body.sql
+    } else {
+        context.log('HTTP SQL request use default query...');
     }
 
     var connection = new Connection(config);
